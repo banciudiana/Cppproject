@@ -11,37 +11,61 @@ class Calculator
 {
 
 private:
-    
+    static double calculate(double left, double right, char op)
+    {
+        switch (op)
+        {
+        case '+':
+            return left + right;
+        case '-':
+            return left - right;
+        case '*':
+            return left * right;
+        case '/':
+            if (right != 0.0)
+            {
+                return left / right;
+            }
+            else
+            {
+                std::cerr << "Error: Division by zero." << std::endl;
+                return 0.0; // Handle division by zero error
+            }
+        default:
+            std::cerr << "Error: Unknown operator." << std::endl;
+            return 0.0; // Handle unknown operator error
+        }
+    }
+    static bool isOperator(char ch)
+    {
+        return ch == '+' || ch == '-' || ch == '*' || ch == '/';
+    }
     static double evaluateExpressionHelper(Token&tokens)
     {
         double result = 0.0;
-      
+        char lastOperator = '+'; 
         while (const char* currentToken = tokens.getNextToken())
         {
             if (tokens.isNumericToken(currentToken))
             {
                 Numerele operand;
                 sscanf(currentToken, "%lf", &operand);
-                result = operand.getValue();
+                result = calculate(result, operand.getValue(), lastOperator);
             }
             else
             {
                 Operator oper;
                 sscanf(currentToken, "%c", &oper);
 
-                switch (oper.getSymbol())
+                if (isOperator(oper.getSymbol()))
                 {
-                case '+':
-                    break;
-                case '-':
-                    break;
-                case '*':
-                   break;
-                case '/':
-                    break;
-                default:
+                    lastOperator = oper.getSymbol();
+                }
+                else
+                {
+                    std::cerr << "Error: Invalid operator." << std::endl;
                     
-                    break;
+                    return 0.0;
                 }
             }
         }

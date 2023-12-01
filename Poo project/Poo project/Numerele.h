@@ -12,7 +12,7 @@ private:
 public:
     Numerele(double val = 0.0) : val(val) {}
 
-    double getVal()  {
+    double getValue()  {
         return val;
     }
 

@@ -8,9 +8,7 @@ private:
     char symbol;
 
 public:
-    Operator() :symbol(NULL) {
-
-    }
+    
     Operator(char op = '\0') : symbol(op) {}
 
     char getSymbol() const {
