@@ -1,7 +1,13 @@
 #include<iostream>
-
+#include "Token.h"
 
 int main()
 {
-	std::cout << std::endl << "hello ";
+	
+    Token tokenizer;
+    std::cin >> tokenizer;
+
+    std::cout << tokenizer << std::endl;
+
+   
 }
