@@ -124,6 +124,11 @@ public:
 		}
 	}
 
+	bool operator==(const Token& t)
+	{
+		return strcmp(expresieMare, t.expresieMare)==0;
+	}
+
 	friend ostream& operator<<(ostream& out, const Token& t);
 	friend istream& operator>>(istream& in, const Token& t);
 
