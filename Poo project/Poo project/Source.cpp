@@ -1,17 +1,15 @@
 #include<iostream>
 #include "Token.h"
 #include "Calculator.h"
+#include <string>
 
 int main()
 {
-	
-    Token tokenizer;
-    std::cin >> tokenizer;
-
-    std::cout << tokenizer << std::endl;
-
-  
-    double result = Calculator::evaluateExpression(tokenizer);
+ 
+    Token token;
+    cin >> token;
+   
+    double result = Calculator::evaluateExpression(token);
 
   
     std::cout << "Result: " << result << std::endl;

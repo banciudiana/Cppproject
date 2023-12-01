@@ -11,6 +11,13 @@ class Calculator
 {
 
 private:
+    double result = 0.0;
+    char lastOperator = '+';
+    static const int maxStackSize = 100;
+    double values[maxStackSize];
+    char operators[maxStackSize];
+    int valueIndex = 0;
+    int operatorIndex = 0;
     static double calculate(double left, double right, char op)
     {
         switch (op)
@@ -44,34 +51,62 @@ private:
     {
         double result = 0.0;
         char lastOperator = '+'; 
+        const int maxStackSize = 100;  
+        double values[maxStackSize];
+        char operators[maxStackSize];
+        int valueIndex = 0;
+        int  operatorIndex = 0;
         while (const char* currentToken = tokens.getNextToken())
         {
             if (tokens.isNumericToken(currentToken))
             {
                 Numerele operand;
                 sscanf(currentToken, "%lf", &operand);
-                result = calculate(result, operand.getValue(), lastOperator);
+                values[valueIndex++] = operand.getValue();
             }
             else
             {
                 Operator oper;
                 sscanf(currentToken, "%c", &oper);
+                char currentOperator = oper.getSymbol();
+                while (operatorIndex > 0 && hasHigherPrecedence(operators[operatorIndex - 1], currentOperator))
+                {
+                    applyOperator(values, valueIndex, operators[--operatorIndex]);
+                }
 
-                if (isOperator(oper.getSymbol()))
-                {
-                    lastOperator = oper.getSymbol();
-                }
-                else
-                {
-                    std::cerr << "Error: Invalid operator." << std::endl;
-                    
-                    return 0.0;
-                }
+                operators[operatorIndex++] = currentOperator;
             }
         }
-        tokens.resetIndex();
+        while (operatorIndex > 0)
+        {
+            applyOperator(values, valueIndex, operators[--operatorIndex]);
+        }
+        if (valueIndex > 0)
+        {
+            return values[--valueIndex];
+        }
+        
+    }
 
-        return result;
+    static bool hasHigherPrecedence(char op1, char op2)
+    {
+        return (op1 == '*' || op1 == '/') && (op2 == '+' || op2 == '-');
+    }
+
+    static void applyOperator(double values[], int& valueIndex, char operators)
+    {
+        if (valueIndex < 2)
+        {
+            throw ("exp invalida");
+            return;
+        }
+
+        double right = values[--valueIndex];
+        double left = values[--valueIndex];
+
+        char op = operators;
+        double result = calculate(left, right, op);
+        values[valueIndex++] = result;
     }
 
 public:
