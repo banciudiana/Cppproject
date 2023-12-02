@@ -5,9 +5,9 @@
 
 int main()
 {
- 
-    Token token;
-    cin >> token;
+  
+        Token token;
+        cin >> token;
    
     double result = Calculator::evaluateExpression(token);
 

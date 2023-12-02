@@ -18,6 +18,8 @@ private:
     char operators[maxStackSize];
     int valueIndex = 0;
     int operatorIndex = 0;
+
+public:
     static double calculate(double left, double right, char op)
     {
         switch (op)
@@ -35,12 +37,12 @@ private:
             }
             else
             {
-                std::cerr << "Error: Division by zero." << std::endl;
-                return 0.0; // Handle division by zero error
+                throw ("nu se poate impartii la zero");
+                return 0.0; 
             }
         default:
-            std::cerr << "Error: Unknown operator." << std::endl;
-            return 0.0; // Handle unknown operator error
+            throw("acest operator nu exista");
+            return 0.0; 
         }
     }
     static bool isOperator(char ch)
@@ -98,7 +100,7 @@ private:
         if (valueIndex < 2)
         {
             throw ("exp invalida");
-            return;
+            
         }
 
         double right = values[--valueIndex];

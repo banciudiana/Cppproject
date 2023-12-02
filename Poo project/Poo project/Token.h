@@ -18,13 +18,15 @@ public:
 		nrToken = 0;
 		currentIndex = 0;
 	}
-	Token(const char* exp):Token()
+	Token( char* exp):Token()
 	{
 
 		if (exp != nullptr)
 		{
-			this->expresieMare = new char[strlen(exp) + 1];
-			strcpy_s(this->expresieMare, strlen(exp) + 1, exp);
+			string inputString(exp);
+			std::string stringWithSpaces = addSpaces(inputString);
+			expresieMare = new char[stringWithSpaces.length() + 1];
+			strcpy_s(expresieMare, stringWithSpaces.length() + 1, stringWithSpaces.c_str());
 		}
 
 	}
@@ -121,6 +123,27 @@ public:
 			return;
 		makeToken();
 
+	}
+	string addSpaces( string& expression) {
+		string result;
+		const string operators = "+-*/";
+
+		for (size_t i = 0; i < expression.length(); ++i) {
+			
+			if (i > 0 && isdigit(expression[i - 1]) && operators.find(expression[i]) != std::string::npos) {
+				result += ' ';
+			}
+
+			if (operators.find(expression[i]) != string::npos && i + 1 < expression.length() && isdigit(expression[i + 1])) {
+				result += expression[i];
+				result += ' ';
+			}
+			else {
+				result += expression[i];
+			}
+		}
+
+		return result;
 	}
 	void afisTokens()
 	{
@@ -232,8 +255,23 @@ istream& operator>>(istream& in,  Token& t)
 {
 	char ch;
 	string line;
-	while (in.get(ch) && ch != '\n')
+	
+	/*while (in.get(ch) && ch != '\n')
 		line += ch;
 	t.setExpresieMare(line.c_str());
+	return in;*/
+
+
+
+	getline(in, line);
+
+	
+	std::string stringWithSpaces = t.addSpaces(line);
+
+	
+	t.setExpresieMare(stringWithSpaces.c_str());
+
+	
+
 	return in;
 }
