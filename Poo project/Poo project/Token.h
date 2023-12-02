@@ -23,8 +23,8 @@ public:
 
 		if (exp != nullptr)
 		{
-			string inputString(exp);
-			std::string stringWithSpaces = addSpaces(inputString);
+			string inpStr(exp);
+			string stringWithSpaces = addSpaces(inpStr);
 			expresieMare = new char[stringWithSpaces.length() + 1];
 			strcpy_s(expresieMare, stringWithSpaces.length() + 1, stringWithSpaces.c_str());
 		}
@@ -65,6 +65,13 @@ public:
 	int getNrToken()
 	{
 		return nrToken;
+	}
+	void setNrToken(int nrT)
+	{
+		if (nrT >= 0)
+		{
+			nrToken = nrT;
+		}
 	}
 	
 	const char* getExpresieMare() {
@@ -124,24 +131,24 @@ public:
 		makeToken();
 
 	}
-	string addSpaces( string& expression) {
+	string addSpaces( string& exp) {
 		string result;
 		const string operators = "+-*/";
 
-		for (size_t i = 0; i < expression.length(); ++i) {
-			
-			if (i > 0 && isdigit(expression[i - 1]) && operators.find(expression[i]) != std::string::npos) {
-				result += ' ';
-			}
+		for (size_t i = 0; i < exp.length(); i++) {
+        if (i > 0 && (isdigit(exp[i - 1]) || exp[i - 1] == '.')) {
+            result += ' ';
+        }
 
-			if (operators.find(expression[i]) != string::npos && i + 1 < expression.length() && isdigit(expression[i + 1])) {
-				result += expression[i];
-				result += ' ';
-			}
-			else {
-				result += expression[i];
-			}
-		}
+        if ((isdigit(exp[i]) || exp[i] == '.') && i + 1 < exp.length() && (isdigit(exp[i + 1]) || exp[i + 1] == '.')) {
+            result += exp[i];
+        } else {
+            result += exp[i];
+            if (i + 1 < exp.length() && (exp[i] == '+' || exp[i] == '-' || exp[i] == '*' || exp[i] == '/')) {
+                result += ' ';
+            }
+        }
+    }
 
 		return result;
 	}
@@ -156,6 +163,13 @@ public:
 	bool operator==(const Token& t)
 	{
 		return strcmp(expresieMare, t.expresieMare)==0;
+	}
+	bool operator!()
+	{
+		if (expresieMare)
+			return true;
+		else 
+			return false;
 	}
 
 	/*bool isNumericToken(index)  {
@@ -211,14 +225,14 @@ public:
 	}
 
 	
-	bool isNumericToken(const char* token) const
+	bool esteNumar(const char* token) 
 	{
 		if (token == nullptr)
 		{
 			return false; 
 		}
 
-		bool hasDecimalPoint = false;
+		bool nrCuVirgula = false;
 
 		for (int  i = 0; i < strlen(token); ++i)
 		{
@@ -226,11 +240,11 @@ public:
 			{
 				if (token[i] == '.')
 				{
-					if (hasDecimalPoint)
+					if (nrCuVirgula)
 					{
 						return false; 
 					}
-					hasDecimalPoint = true;
+					nrCuVirgula = true;
 				}
 				else
 				{
@@ -253,25 +267,12 @@ ostream& operator<<(ostream& out, const Token& t)
 
 istream& operator>>(istream& in,  Token& t)
 {
-	char ch;
+
 	string line;
-	
-	/*while (in.get(ch) && ch != '\n')
-		line += ch;
-	t.setExpresieMare(line.c_str());
-	return in;*/
-
-
 
 	getline(in, line);
-
-	
-	std::string stringWithSpaces = t.addSpaces(line);
-
-	
-	t.setExpresieMare(stringWithSpaces.c_str());
-
-	
+	string stringCuSpatii = t.addSpaces(line);
+	t.setExpresieMare(stringCuSpatii.c_str());
 
 	return in;
 }

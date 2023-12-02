@@ -2,17 +2,17 @@
 #include "Token.h"
 #include "Calculator.h"
 #include <string>
-
+using namespace std;
 int main()
 {
   
-        Token token;
-        cin >> token;
+    Token token;
+    cin >> token;
    
     double result = Calculator::evaluateExpression(token);
 
   
-    std::cout << "Result: " << result << std::endl;
+    cout << "Result: " << result << endl;
 
     return 0;
    
