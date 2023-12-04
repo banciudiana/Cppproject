@@ -2,6 +2,8 @@
 #include "Token.h"
 #include "Calculator.h"
 #include <string>
+//versiune finala
+
 using namespace std;
 int main()
 {
